@@ -22,9 +22,7 @@ const jobTemplateSchema = new mongoose.Schema({
 
     priority: {
         type: String,
-        enum: ['Urgent', 'High', 'Medium', 'Low'],
-        required: [true, 'Priority is required']
-    },
+        },
     description: {
         type: String,
     },
@@ -41,7 +39,7 @@ const jobTemplateSchema = new mongoose.Schema({
     },
     startsinduration: {
         type: String,
-        enum: ['Days', 'Month', 'Year'],
+        enum: ['Days', 'Months', 'Years'],
         required: function () {
             return !this.absolutedates;
         }
@@ -55,7 +53,7 @@ const jobTemplateSchema = new mongoose.Schema({
     },
     dueinduration: {
         type: String,
-        enum: ['Days', 'Month', 'Year'],
+        enum: ['Days', 'Months', 'Years'],
         required: function () {
             return !this.absolutedates;
         }

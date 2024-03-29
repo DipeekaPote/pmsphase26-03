@@ -2,11 +2,11 @@ const express = require('express')
 const router = express.Router()
 
 const { getPipelines, getPipeline, createPipeline, updatePipeline, deletePipeline} = require('../../controllers/Workflow/pipelineTemplateController')
-const { createJobTemplate, getJobTemplate, getJobTemplates, deleteJobTemplate, updateJobTemplate} = require('../../controllers/Workflow/jobTemplateController')
+const { createJobTemplate, getJobTemplate, getJobTemplates, deleteJobTemplate, updateJobTemplate, getJobTemplateList} = require('../../controllers/Workflow/jobTemplateController')
 const { createJob, getJobs, getJob, deleteJob, updateJob} = require('../../controllers/Workflow/jobController')
 // Import the required schema and models
 const pipelinedata= require('../../controllers/Workflow/boardsDataController'); // Assuming 'boardsData.js' is where you defined your 'boardsDataSchema'
-
+const { getEmailTemplates,createEmailTemplate,getEmailTemplate,deleteEmailTemplate, updateEmailTemplate } = require('../../controllers/Workflow/emailTemplateController')
 
 
 //*******************Pipeline START********************* */
@@ -85,12 +85,38 @@ router.delete('/jobtemplate/:id', deleteJobTemplate)
 
 router.patch('/jobtemplate/:id', updateJobTemplate)
 
+//GET single jobtemplate 
+
+router.get('/jobtemplate/jobtemplatelist/:id', getJobTemplateList)
+
 //*******************jobtemplate END********************* */
 
 
 
 // Define a route handler
 router.get('/pipeline/boardsData/:id', pipelinedata);
+
+//*******************Email emplate Start********************* */
+
+router.get('/emailtemplate', getEmailTemplates)
+
+//GET single emailtemplate 
+
+router.get('/emailtemplate/:id', getEmailTemplate)
+
+//POST a new emailtemplate
+
+router.post('/emailtemplate', createEmailTemplate)
+
+//Delete a new emailtemplate
+
+router.delete('/emailtemplate/:id', deleteEmailTemplate)
+
+//PATCH UPDATE a emailtemplate 
+
+router.patch('/emailtemplate/:id', updateEmailTemplate)
+
+//*******************Email template END********************* */
 
 
 module.exports = router

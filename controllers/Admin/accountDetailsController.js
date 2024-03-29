@@ -1,5 +1,6 @@
 const Account = require('../../models/Admin/accountDetailsModel.js');
 const companyAddress = require('../../models/Admin/companyAddressModel.js');
+const Tags = require('../../models/Common/tagModel.js');
 
 const multer = require('multer');
 const fs = require('fs');
@@ -102,7 +103,7 @@ const createAccount = async (req, res) => {
             fs.mkdirSync(accountIdFolder, { recursive: true });
         }
 
-         res.status(200).json({
+        res.status(200).json({
             message: "Account created successfully",
             newAccount,
             newCompanyAccount: newCompanyAccount ? {
@@ -169,6 +170,44 @@ const updateAccount = async (req, res) => {
 };
 
 
+//get all accounts List
+const getAccountsList = async (req, res) => {
+    try {
+        const accounts = await Account.find({})
+            .populate({ path: 'tags', model: 'tag' })
+            .populate({ path: 'teamMembers', model: 'User' })
+            .populate({ path: 'contacts', model: 'contact' });
+
+
+         const accountlist = accounts.map(account => {
+             return {
+                id: account._id,
+                Name: account.accountName,
+                Follow: "",
+                Type: account.clientType,
+                Invoices: "",
+                Credits: "",
+                Tasks: "",
+                Team: "",
+                Tags: account.tags,
+                Proposals: "",
+                Unreadchats: "",
+                Pendingorganizers: "",
+                Pendingsignatures: "",
+                Lastlogin: "",
+            };
+        });
+
+
+        //sort({ createdAt: -1 });
+        res.status(200).json({ message: "Accounts retrieved successfully", accountlist })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+
+
 module.exports = {
     createAccount,
     getAccount,
@@ -176,5 +215,6 @@ module.exports = {
     updateAccount,
     deleteAccount,
     upload,
+    getAccountsList,
 }
 

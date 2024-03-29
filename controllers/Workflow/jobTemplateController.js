@@ -35,7 +35,7 @@ const getJobTemplate = async (req, res) => {
 
 //POST a new JobTemplate 
 const createJobTemplate = async (req, res) => {
-    const { templatename, jobname, addshortcode, jobassignees, priority, absolutedates, startsin, startsinduration, duein, dueinduration, startdate, enddate, comments, active } = req.body;
+    const { templatename, jobname, addshortcode, description, jobassignees, priority, absolutedates, startsin, startsinduration, duein, dueinduration, startdate, enddate, comments, active } = req.body;
 
     try {
         // Check if a task template with similar properties already exists
@@ -47,7 +47,7 @@ const createJobTemplate = async (req, res) => {
             return res.status(400).json({ error: "Job template already exists" });
         }
         // If no existing template is found, create a new one
-        const newJobTemplate = await JobTemplate.create({ templatename, jobname, addshortcode, jobassignees, priority, absolutedates, startsin, startsinduration, duein, dueinduration, startdate, enddate, comments, active
+        const newJobTemplate = await JobTemplate.create({ templatename, jobname, description, addshortcode, jobassignees, priority, absolutedates, startsin, startsinduration, duein, dueinduration, startdate, enddate, comments, active
         });
         return res.status(201).json({ message: "Job template created successfully", newJobTemplate });
     } catch (error) {
@@ -102,10 +102,36 @@ const updateJobTemplate = async (req, res) => {
     }
 };
 
+
+
+//Get a single JobTemplate List
+const getJobTemplateList = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "Invalid JobTemplate ID" });
+    }
+
+    try {
+        const jobTemplate = await JobTemplate.findById(id)
+         .populate({ path: 'jobassignees', model: 'User' });
+                  
+        if (!jobTemplate) {
+            return res.status(404).json({ error: "No such JobTemplate" });
+        }
+
+        res.status(200).json({ message: "JobTemplate retrieved successfully", jobTemplate });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 module.exports = {
     createJobTemplate,
     getJobTemplate,
     getJobTemplates,
     deleteJobTemplate,
-    updateJobTemplate
+    updateJobTemplate,
+    getJobTemplateList
 }

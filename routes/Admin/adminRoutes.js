@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { createAdmin, getAdmins, getAdmin, deleteAdmin, updateAdmin, updatePassword, getAdminByEmail } = require('../../controllers/Admin/adminSignupController')
-const { createAccount, getAccount, getAccounts, updateAccount, deleteAccount, upload } = require('../../controllers/Admin/accountDetailsController')
+const { createAccount, getAccount, getAccounts, updateAccount, deleteAccount, getAccountsList, upload } = require('../../controllers/Admin/accountDetailsController')
 
 
 //*******************ADMIN SIGNUP START********************* */
@@ -65,6 +65,11 @@ router.delete('/accountdetails/:id', deleteAccount)
 //PATCH UPDATE a adminsignup 
 
 router.patch('/accountdetails/:id', updateAccount)
+
+//GET accountdetails List
+
+router.get('/account/accountdetailslist/', getAccountsList)
+
 
 //*******************ACCOUNT DETAILS END********************* */
 

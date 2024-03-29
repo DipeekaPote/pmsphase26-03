@@ -10,7 +10,8 @@ const stageSchema = new mongoose.Schema({
   },
   automations: [{
     type: Array,
-    type: mongoose.Schema.Types.ObjectId, ref: 'Automations',
+     type: mongoose.Schema.Types.ObjectId, ref: 'Automations',
+     
   }],
   automove: {
     type: Boolean,
@@ -62,6 +63,11 @@ const pipelineSchema = new mongoose.Schema(
     },
 
     priority: {
+      type: Boolean,
+      default: false, // Provide a default value if needed
+    },
+
+    days_on_Stage: {
       type: Boolean,
       default: false, // Provide a default value if needed
     },

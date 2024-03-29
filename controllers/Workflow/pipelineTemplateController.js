@@ -37,9 +37,9 @@ const getPipeline = async (req, res) => {
 const createPipeline = async (req, res) => {
     try {
         let newPipeline;
-        const { pipelineName, availableto, sortjobsby, defaultjobtemplate, accountId, description, duedate, accounttags, priority, assignees, name, startdate, stages, active } = req.body;
+        const { pipelineName, availableto, sortjobsby, defaultjobtemplate, accountId, description, duedate, accounttags, priority,days_on_Stage, assignees, name, startdate, stages, active } = req.body;
 
-        newPipeline = await Pipeline.create({ pipelineName, availableto, sortjobsby, defaultjobtemplate, accountId, description, duedate, accounttags, priority, assignees, name, startdate, stages, active });
+        newPipeline = await Pipeline.create({ pipelineName, availableto, sortjobsby, defaultjobtemplate, accountId, description, duedate, accounttags, priority,days_on_Stage, assignees, name, startdate, stages, active });
 
         res.status(200).json({
             message: "Pipeline created successfully",newPipeline      
