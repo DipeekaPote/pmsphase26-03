@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 //get all contacts
 const getContacts = async (req, res) => {
     try {
-        const contacts = await Contact.find({}).populate({ path: 'tags', select: 'tagName' });
+        const contacts = await Contact.find({});
         res.status(200).json({ message: "Contacts retrieved successfully", contacts });
 
     } catch (error) {
@@ -35,10 +35,10 @@ const getContact = async (req, res) => {
 
 //POST a new account 
 const createContact = async (req, res) => {
-    const { firstName, middleName, lastName, contactName, companyName, note, ssn, email, login, notify, emailSync, tags, country, streetAddress, city, state, postalCode, phoneNumbers,active } = req.body;
+    const { firstName, middleName, lastName, contactName, companyName, note, ssn, email, login, notify, emailSync, tags, country, streetAddress, city, state, postalCode, phoneNumbers, active } = req.body;
     try {
 
-        const newContact = await Contact.create({ firstName, middleName, lastName, contactName, companyName, note, ssn, email, login, notify, emailSync, tags, country, streetAddress, city, state, postalCode,phoneNumbers, active })
+        const newContact = await Contact.create({ firstName, middleName, lastName, contactName, companyName, note, ssn, email, login, notify, emailSync, tags, country, streetAddress, city, state, postalCode, phoneNumbers, active })
         res.status(200).json({ message: "Contact created successfully", newContact });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -90,10 +90,42 @@ const updateContact = async (req, res) => {
     }
 };
 
+
+//get all contacts
+const getContactsList = async (req, res) => {
+    try {
+
+        const contacts = await Contact.find({})
+        .populate({ path: 'tags', model: 'tag' })
+        const contactlist = contacts.map(contact => {
+        
+            // Find the primary phone number
+            const primaryPhoneNumber = contact.phoneNumbers.find(number => number[0]);
+
+            return {
+                id: contact._id,
+                Name: contact.contactName,
+                Email: contact.email,
+                phoneNumber: primaryPhoneNumber,
+                companyName: contact.companyName,
+                Tags: contact.tags,
+            };
+        });
+
+        res.status(200).json({ message: "Contacts list retrieved successfully", contactlist });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+
+
 module.exports = {
     createContact,
     getContact,
     getContacts,
     deleteContact,
-    updateContact
+    updateContact,
+    getContactsList
 }

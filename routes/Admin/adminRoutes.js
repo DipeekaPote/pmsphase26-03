@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { createAdmin, getAdmins, getAdmin, deleteAdmin, updateAdmin, updatePassword, getAdminByEmail } = require('../../controllers/Admin/adminSignupController')
-const { createAccount, getAccount, getAccounts, updateAccount, deleteAccount, getAccountsList, upload } = require('../../controllers/Admin/accountDetailsController')
+const { createAccount, getAccount, getAccounts, updateAccount, deleteAccount, getAccountsList, getAccountsShortCode } = require('../../controllers/Admin/accountDetailsController')
 
 
 //*******************ADMIN SIGNUP START********************* */
@@ -49,10 +49,6 @@ router.get('/accountdetails/:id', getAccount)
 
 router.post('/accountdetails', createAccount)
 
-// Route handler for file upload
-router.post('/accountdetails/upload', upload.single('file'), (req, res) => {
-    res.send('File uploaded successfully');
-});
 
 // router.post('/accountdetails', upload.single('file'), async (req, res) => {
 // createAccount
@@ -70,6 +66,9 @@ router.patch('/accountdetails/:id', updateAccount)
 
 router.get('/account/accountdetailslist/', getAccountsList)
 
+
+//GET accountdetails List
+router.get('/accountdetails/accountshortcode/:_id', getAccountsShortCode)
 
 //*******************ACCOUNT DETAILS END********************* */
 

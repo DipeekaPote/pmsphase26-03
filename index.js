@@ -66,7 +66,9 @@ const workflowRoutes = require("../pmsbackend/routes/Workflow/pipelineRoute");
 app.use("/workflow", workflowRoutes);
 
 
-
+//! EmailTemplate Routes
+const templateMailSend = require("../pmsbackend/controllers/middlewares/templateMailSend");
+app.use("/", templateMailSend);
 
 
 

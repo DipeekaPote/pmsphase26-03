@@ -1,4 +1,5 @@
 const Job = require('../../models/Workflow/jobModel');
+const Pipeline = require('../../models/Workflow/pipelineTemplateModel');
 const mongoose = require("mongoose");
 
 //get all JobTemplate
@@ -50,9 +51,20 @@ const createJob = async (req, res) => {
             return res.status(400).json({ error: "Job already exists" });
         }
 
+         // Find the pipeline associated with the job
+         const jobPipeline = await Pipeline.findById(pipeline);
+
+         // Get the ID of the first stage in the pipeline
+         const defaultStageId = jobPipeline.stages.length > 0 ? jobPipeline.stages[0]._id : null;
+ 
+         // Use the provided stageid or defaultStageId if not provided
+         const selectedStageId = stageid || defaultStageId;
+ 
+
         // If no existing template is found, create a new one
         const newJob = await Job.create({
-            accounts, pipeline, stageid, templatename, jobname, addShortCode, jobassignees, priority, description, absolutedates, startsin, startsinduration, duein, dueinduration, startdate, enddate, comments, active
+
+            accounts, pipeline, stageid: selectedStageId, templatename, jobname, addShortCode, jobassignees, priority, description, absolutedates, startsin, startsinduration, duein, dueinduration, startdate, enddate, comments, active
         });
         return res.status(201).json({ message: "Job created successfully", newJob });
     } catch (error) {
@@ -107,10 +119,76 @@ const updateJob = async (req, res) => {
     }
 };
 
+const getJobList = async (req, res) => {
+    try {
+        const jobs = await Job.find()
+            .populate({ path: 'accounts', model: 'account' })
+            .populate({ path: 'pipeline', model: 'pipeline', populate: { path: 'stages', model: 'stage' } })
+            .populate({ path: 'jobassignees', model: 'User' });
+
+        const jobList = [];
+
+        for (const job of jobs) {
+            // Fetching the pipeline document for each job
+            const pipeline = await Pipeline.findById(job.pipeline);
+
+            if (!pipeline) {
+                // If pipeline is not found, skip this job
+                continue;
+            }
+
+            const jobAssigneeNames = job.jobassignees.map(assignee => assignee.username);
+            const accountsname = job.accounts.map(account => account.accountName);
+
+            let stageNames = null;
+
+            if (Array.isArray(job.stageid)) {
+                // Iterate over each stage ID and find the corresponding stage name
+                stageNames = [];
+                for (const stageId of job.stageid) {
+                    const matchedStage = pipeline.stages.find(stage => stage._id.equals(stageId));
+                    if (matchedStage) {
+                        stageNames.push(matchedStage.name);
+                    }
+                }
+            } else {
+                // If job.stageid is not an array, convert it to an array containing a single element
+                const matchedStage = pipeline.stages.find(stage => stage._id.equals(job.stageid));
+                if (matchedStage) {
+                    stageNames = [matchedStage.name];
+                }
+            }
+
+            jobList.push({
+                id: job._id,
+                Name: job.jobname,
+                JobAssignee: jobAssigneeNames,
+                Pipeline: pipeline ? pipeline.pipelineName : null,
+                Stage: stageNames,
+                Account: accountsname,
+                StartDate: job.startdate,
+                DueDate: job.enddate,
+                StartsIn: job.startsin ? `${job.startsin} ${job.startsinduration}` : null,
+                DueIn: job.duein ? `${job.duein} ${job.dueinduration}` : null,
+                createdAt: job.createdAt,
+                updatedAt: job.updatedAt,
+            });
+        }
+
+        res.status(200).json({ message: "JobTemplate retrieved successfully", jobList });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
+
 module.exports = {
     createJob,
     getJobs,
     getJob,
     deleteJob,
-    updateJob
+    updateJob,
+    getJobList
 }

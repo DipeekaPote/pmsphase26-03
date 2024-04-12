@@ -119,9 +119,7 @@ router.post("/forgotpassword", async (req, res) => {
       console.log("Email sent:", info.response);
       res.status(200).json({ status:200, result });
 
-      // res.status(200).json({status:200, result });  
-    
-      
+      // res.status(200).json({status:200, result });        
     }
   });
 });

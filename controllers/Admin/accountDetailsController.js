@@ -179,8 +179,9 @@ const getAccountsList = async (req, res) => {
             .populate({ path: 'contacts', model: 'contact' });
 
 
-         const accountlist = accounts.map(account => {
-             return {
+        const accountlist = accounts.map(account => {
+
+            return {
                 id: account._id,
                 Name: account.accountName,
                 Follow: "",
@@ -188,7 +189,7 @@ const getAccountsList = async (req, res) => {
                 Invoices: "",
                 Credits: "",
                 Tasks: "",
-                Team: "",
+                Team: account.teamMembers,
                 Tags: account.tags,
                 Proposals: "",
                 Unreadchats: "",
@@ -208,13 +209,33 @@ const getAccountsList = async (req, res) => {
 
 
 
+
+//get all accounts ShortCode data
+const getAccountsShortCode = async (req, res) => {
+    const { _id } = req.params;
+    const { accountshortcode } = req.body;
+
+    try {
+        const accounts = await Account.findById({ _id })
+        // Assuming accounts is not null
+        const accountName = accounts ? accounts.accountName : null;
+
+
+        //sort({ createdAt: -1 });
+        res.status(200).json({ message: "Accounts shortcode retrieved successfully", accountName })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+};
+
+
 module.exports = {
     createAccount,
     getAccount,
     getAccounts,
     updateAccount,
     deleteAccount,
-    upload,
     getAccountsList,
+    getAccountsShortCode,
 }
 

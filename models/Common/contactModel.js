@@ -39,23 +39,22 @@ const contactSchema = new mongoose.Schema({
     },
     login: {
         type: Boolean,
-        required: [true, 'Login is required'],
+       default : false
     },
     notify: {
         type: String,
-        required: [true, 'Notify is required'],
+        default : false
     },
     emailSync: {
         type: String,
-        required: [true, 'Email sync is required'],
+        default : false
     },
     tags: [{
             type: mongoose.Schema.Types.ObjectId,
             type: Array,
             ref: 'tag', 
            // required: true
-    }
-    ],
+    }],
 
     country: {
         type: String,

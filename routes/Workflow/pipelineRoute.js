@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-const { getPipelines, getPipeline, createPipeline, updatePipeline, deletePipeline} = require('../../controllers/Workflow/pipelineTemplateController')
+const { getPipelines, getPipeline, createPipeline, updatePipeline, deletePipeline, getPipelineTemplateList} = require('../../controllers/Workflow/pipelineTemplateController')
 const { createJobTemplate, getJobTemplate, getJobTemplates, deleteJobTemplate, updateJobTemplate, getJobTemplateList} = require('../../controllers/Workflow/jobTemplateController')
-const { createJob, getJobs, getJob, deleteJob, updateJob} = require('../../controllers/Workflow/jobController')
+const { createJob, getJobs, getJob, deleteJob, updateJob, getJobList} = require('../../controllers/Workflow/jobController')
 // Import the required schema and models
 const pipelinedata= require('../../controllers/Workflow/boardsDataController'); // Assuming 'boardsData.js' is where you defined your 'boardsDataSchema'
 const { getEmailTemplates,createEmailTemplate,getEmailTemplate,deleteEmailTemplate, updateEmailTemplate } = require('../../controllers/Workflow/emailTemplateController')
@@ -30,6 +30,10 @@ router.delete('/pipeline/:id', deletePipeline)
 //PATCH UPDATE a Pipeline 
 
 router.patch('/pipeline/:id', updatePipeline)
+
+//GET single Pipeline 
+
+router.get('/pipeline/pipelinelist/:id', getPipelineTemplateList)
 
 //*******************Pipeline END********************* */
 
@@ -59,6 +63,10 @@ router.delete('/job/:id', deleteJob)
 //PATCH UPDATE a job 
 
 router.patch('/job/:id', updateJob)
+
+//GET all job 
+
+router.get('/job/joblist/list', getJobList)
 
 //*******************job END********************* */
 

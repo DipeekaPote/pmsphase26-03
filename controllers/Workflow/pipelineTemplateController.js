@@ -96,11 +96,38 @@ const updatePipeline = async (req, res) => {
 };
 
 
+
+//Get a single JobTemplate List
+const getPipelineTemplateList = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "Invalid JobTemplate ID" });
+    }
+
+    try {
+        const pipelineTemplate = await Pipeline.findById(id)
+         .populate({ path: 'availableto', model: 'User' })
+         .populate({ path : 'sortjobsby', model : 'SortJobsBy'})
+         .populate({ path : 'defaultjobtemplate', model : 'JobTemplate'})
+         
+
+        if (!pipelineTemplate) {
+            return res.status(404).json({ error: "No such PipelineTemplate" });
+        }
+
+        res.status(200).json({ message: "PipelineTemplate retrieved successfully", pipelineTemplate });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     getPipelines,
     getPipeline,
     createPipeline,
     updatePipeline,
     deletePipeline,
+    getPipelineTemplateList,
 }
 

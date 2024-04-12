@@ -7,7 +7,7 @@ const fs = require('fs');
 const { createRole, getRoles, getRole, deleteRole, updateRole } = require('../../controllers/Common/roleControler')
 const { createTag, getTag, getTags, deleteTag, updateTag } = require('../../controllers/Common/tagController')
 const { createAccessRight, getAccessRight, getAccessRights, deleteAccessRight, updateAccessRight } = require('../../controllers/Common/accessRightsController')
-const { createContact, getContact, getContacts, deleteContact, updateContact } = require('../../controllers/Common/contactController')
+const { createContact, getContact, getContacts, deleteContact, updateContact, getContactsList } = require('../../controllers/Common/contactController')
 const { createUser, getUsers, getUser, deleteUser, updateUser, adminSignup, getUserByEmail, updateUserPassword, updateLoginStatus } = require("../../controllers/Common/userController");
 const { validateToken } = require("../../controllers/middlewares/authJwt");
 const { generatetoken } = require("../../controllers/Common/loginController");
@@ -115,15 +115,15 @@ router.patch("/user/password/updateuserpassword/", updateUserPassword);
 
 //GET all tags 
 
-router.get('/tag',getTags)
+router.get('/tag', getTags)
 
 //GET single tag 
 
-router.get('/tag/:id',getTag)
-
+router.get('/tag/:id', getTag)
+ 
 //POST a new tag
 
-router.post('/tag',createTag)
+router.post('/tag', createTag)
     
 //DELETE a tag 
 
@@ -182,6 +182,10 @@ router.delete('/contact/:id', deleteContact)
 //PATCH UPDATE a contact 
 
 router.patch('/contact/:id', updateContact)
+
+//GET all contact  list
+
+router.get('/contact/contactlist/list/', getContactsList)
 
 //*******************CONTACT END********************* */
 
