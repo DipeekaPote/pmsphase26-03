@@ -6,7 +6,7 @@ const { createJobTemplate, getJobTemplate, getJobTemplates, deleteJobTemplate, u
 const { createJob, getJobs, getJob, deleteJob, updateJob, getJobList} = require('../../controllers/Workflow/jobController')
 // Import the required schema and models
 const pipelinedata= require('../../controllers/Workflow/boardsDataController'); // Assuming 'boardsData.js' is where you defined your 'boardsDataSchema'
-const { getEmailTemplates,createEmailTemplate,getEmailTemplate,deleteEmailTemplate, updateEmailTemplate } = require('../../controllers/Workflow/emailTemplateController')
+const { getEmailTemplates,createEmailTemplate,getEmailTemplate,deleteEmailTemplate, updateEmailTemplate,getEmailTemplateList } = require('../../controllers/Workflow/emailTemplateController')
 
 
 //*******************Pipeline START********************* */
@@ -111,6 +111,8 @@ router.get('/emailtemplate', getEmailTemplates)
 //GET single emailtemplate 
 
 router.get('/emailtemplate/:id', getEmailTemplate)
+
+router.get('/emailtemplate/emailtemplateList/:id', getEmailTemplateList)
 
 //POST a new emailtemplate
 

@@ -17,11 +17,12 @@ const getEmailTemplate = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: "Invalid JobTemplate ID" });
+        return res.status(404).json({ error: "Invalid Emailtemplate ID" });
     }
 
     try {
-        const emailTemplate = await EmailTemplate.findById(id);
+        const emailTemplate = await EmailTemplate.findById(id)
+
 
         if (!emailTemplate) {
             return res.status(404).json({ error: "No such JobTemplate" });
@@ -32,6 +33,33 @@ const getEmailTemplate = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+
+//Get a single JobTemplate List
+const getEmailTemplateList = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "Invalid JobTemplate ID" });
+    }
+
+    try {
+        const emailTemplate = await EmailTemplate.findById(id)
+         .populate({ path: 'from', model: 'User' });
+                  
+         
+        if (!emailTemplate) {
+            return res.status(404).json({ error: "No such emailTemplate" });
+        }
+
+        res.status(200).json({ message: "emailTemplate retrieved successfully", emailTemplate });
+    } catch (error) {
+        res.status(500).json({ error: error.message});
+ }
+};
+
+
 
 //POST a new JobTemplate 
 const createEmailTemplate = async (req, res) => {
@@ -107,5 +135,6 @@ module.exports = {
     getEmailTemplates,
     getEmailTemplate,
     deleteEmailTemplate,
-    updateEmailTemplate
+    updateEmailTemplate,
+    getEmailTemplateList
 }
