@@ -51,15 +51,15 @@ const createJob = async (req, res) => {
             return res.status(400).json({ error: "Job already exists" });
         }
 
-         // Find the pipeline associated with the job
-         const jobPipeline = await Pipeline.findById(pipeline);
+        // Find the pipeline associated with the job
+        const jobPipeline = await Pipeline.findById(pipeline);
 
-         // Get the ID of the first stage in the pipeline
-         const defaultStageId = jobPipeline.stages.length > 0 ? jobPipeline.stages[0]._id : null;
- 
-         // Use the provided stageid or defaultStageId if not provided
-         const selectedStageId = stageid || defaultStageId;
- 
+        // Get the ID of the first stage in the pipeline
+        const defaultStageId = jobPipeline.stages.length > 0 ? jobPipeline.stages[0]._id : null;
+
+        // Use the provided stageid or defaultStageId if not provided
+        const selectedStageId = stageid || defaultStageId;
+
 
         // If no existing template is found, create a new one
         const newJob = await Job.create({
@@ -182,7 +182,72 @@ const getJobList = async (req, res) => {
 };
 
 
+const getJobListbyid = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const jobs = await Job.findById(id)
+            // .populate({ path: 'accounts', model: 'account' })
+            .populate({ 
+                path: 'accounts', 
+                model: 'account',
+                populate: {
+                    path: 'tags', // Assuming 'tags' is the field containing tag details within the 'account' model
+                    model: 'tag' // Assuming 'Tag' is the model for tags
+                }
+            })
+            .populate({ path: 'pipeline', model: 'pipeline', populate: { path: 'stages', model: 'stage' } })
+            .populate({ path: 'jobassignees', model: 'User' });
 
+        
+
+        
+            // Fetching the pipeline document for each job
+            const pipeline = await Pipeline.findById(jobs.pipeline);
+          
+            let stageNames = null;
+
+            if (Array.isArray(jobs.stageid)) {
+                // Iterate over each stage ID and find the corresponding stage name
+                stageNames = [];
+                for (const stageId of jobs.stageid) {
+                    const matchedStage = pipeline.stages.find(stage => stage._id.equals(stageId));
+                    if (matchedStage) {
+                        stageNames.push({ name: matchedStage.name, _id: matchedStage._id });
+                    }
+                }
+            } else {
+                // If job.stageid is not an array, convert it to an array containing a single element
+                const matchedStage = pipeline.stages.find(stage => stage._id.equals(jobs.stageid));
+                if (matchedStage) {
+                    stageNames = [{ name: matchedStage.name, _id: matchedStage._id }];
+                }
+            }
+
+           const jobList = ({
+                id: jobs._id,
+                Name: jobs.jobname,
+                JobAssignee: jobs.jobassignees,
+                // Pipeline: pipeline ? pipeline.pipelineName : null,
+                Pipeline: {
+                    _id: pipeline._id, // Include the _id of the pipeline
+                    Name: pipeline.pipelineName
+                },
+                Stage: stageNames,
+                Account: jobs.accounts,
+                StartDate: jobs.startdate,
+                DueDate: jobs.enddate,
+                StartsIn: jobs.startsin ? `${jobs.startsin} ${jobs.startsinduration}` : null,
+                DueIn: jobs.duein ? `${jobs.duein} ${jobs.dueinduration}` : null,
+                createdAt: jobs.createdAt,
+                updatedAt: jobs.updatedAt,
+            });
+        
+
+        res.status(200).json({ message: "Job retrieved successfully", jobList });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 module.exports = {
     createJob,
@@ -190,5 +255,6 @@ module.exports = {
     getJob,
     deleteJob,
     updateJob,
-    getJobList
+    getJobList,
+    getJobListbyid
 }
