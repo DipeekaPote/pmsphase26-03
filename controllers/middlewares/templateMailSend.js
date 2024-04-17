@@ -5,6 +5,7 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 const secretKey = process.env.TOKEN_KEY;
 const Account = require('../../models/Admin/accountDetailsModel.js');
+const Contact = require('../../models/Common/contactModel.js');
 const EmailTemplate = require('../../models/Workflow/emailTemplate.js');
 const { ConnectionStates } = require("mongoose");
 
@@ -17,9 +18,15 @@ router.post("/templatemailsend", async (req, res) => {
     }
 
     const account = await Account.findById(accountid);
-    const EmailTemp = await EmailTemplate.findById(emailtemplateid);
 
+    const contacts = account.contacts;
 
+    
+
+    console.log(contacts)
+
+    const contact = await Contact.findById(contacts);
+    console.log(contact)
 
     // Function to replace placeholders with actual data
     const replacePlaceholders = (template, data) => {
@@ -84,7 +91,17 @@ router.post("/templatemailsend", async (req, res) => {
     const mailBody = replacePlaceholders(emailbody, {
         ACCOUNT_NAME: account.accountName,
 
-        FIRST_NAME: account.accountName,
+        FIRST_NAME: contact.firstName,
+        MIDDLE_NAME: contact.middleName,
+        LAST_NAME: contact.lastName,
+        CONTACT_NAME: contact.contactName,
+        COMPANY_NAME: contact.companyName,
+        COUNTRY: contact.country,
+        STREET_ADDRESS: contact.streetAddress,
+        STATEPROVINCE: contact.state,
+        PHONE_NUMBER: contact.phoneNumbers,
+        ZIPPOSTALCODE : contact.postalCode,
+        CITY : contact.city,
 
         CURRENT_DAY_FULL_DATE: currentFullDate,
         CURRENT_DAY_NUMBER: currentDayNumber,
@@ -117,6 +134,9 @@ router.post("/templatemailsend", async (req, res) => {
         ACCOUNT_NAME: account.accountName,
 
         FIRST_NAME: account.accountName,
+
+
+
 
         CURRENT_DAY_FULL_DATE: currentFullDate,
         CURRENT_DAY_NUMBER: currentDayNumber,

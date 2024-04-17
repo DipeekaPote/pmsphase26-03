@@ -1,14 +1,14 @@
 const nodemailer = require("nodemailer");
 
-// Create transporter with Outlook service and authentication
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "vinayak.intcon@gmail.com",
-    pass: "Radhika4321",
-  },
-});
-
+    // Create transporter with Outlook service and authentication
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+          user: "rohitkumbhar7009@gmail.com",
+          pass: "vwjz zrbe rwbe dhnj",
+      },
+  });
+  
 // Function to send email
 function sendEmail(from, to, subject, text) {
   //html page 

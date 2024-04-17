@@ -197,10 +197,7 @@ const getJobListbyid = async (req, res) => {
             })
             .populate({ path: 'pipeline', model: 'pipeline', populate: { path: 'stages', model: 'stage' } })
             .populate({ path: 'jobassignees', model: 'User' });
-
-        
-
-        
+      
             // Fetching the pipeline document for each job
             const pipeline = await Pipeline.findById(jobs.pipeline);
           
@@ -238,6 +235,9 @@ const getJobListbyid = async (req, res) => {
                 DueDate: jobs.enddate,
                 StartsIn: jobs.startsin ? `${jobs.startsin} ${jobs.startsinduration}` : null,
                 DueIn: jobs.duein ? `${jobs.duein} ${jobs.dueinduration}` : null,
+                Priority:jobs.priority,
+
+                Description:jobs.description,
                 createdAt: jobs.createdAt,
                 updatedAt: jobs.updatedAt,
             });

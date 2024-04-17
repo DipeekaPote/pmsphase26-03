@@ -72,15 +72,15 @@ router.post("/request-otp", async (req, res) => {
 
 </html>`;
 
-  // Create transporter with Outlook service and authentication
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "vinayak.intcon@gmail.com",
-      pass: "pahv npbs dnhz pqgi",
-    },
+    // Create transporter with Outlook service and authentication
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+          user: "rohitkumbhar7009@gmail.com",
+          pass: "vwjz zrbe rwbe dhnj",
+      },
   });
-
+  
   const mailOptions = {
     from: "vinayak.intcon@gmail.com",
     to: email,

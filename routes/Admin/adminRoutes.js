@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { createAdmin, getAdmins, getAdmin, deleteAdmin, updateAdmin, updatePassword, getAdminByEmail } = require('../../controllers/Admin/adminSignupController')
-const { createAccount, getAccount, getAccounts, updateAccount, deleteAccount, getAccountsList, getAccountsShortCode } = require('../../controllers/Admin/accountDetailsController')
+const { createAccount, getAccount, getAccounts, updateAccount, deleteAccount, getAccountsList, getAccountsListById } = require('../../controllers/Admin/accountDetailsController')
 
 
 //*******************ADMIN SIGNUP START********************* */
@@ -68,7 +68,7 @@ router.get('/account/accountdetailslist/', getAccountsList)
 
 
 //GET accountdetails List
-router.get('/accountdetails/accountshortcode/:_id', getAccountsShortCode)
+router.get('/accountdetails/accountdetailslist/listbyid/:id', getAccountsListById)
 
 //*******************ACCOUNT DETAILS END********************* */
 

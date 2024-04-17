@@ -210,23 +210,45 @@ const getAccountsList = async (req, res) => {
 
 
 
-//get all accounts ShortCode data
-const getAccountsShortCode = async (req, res) => {
-    const { _id } = req.params;
-    const { accountshortcode } = req.body;
 
+//get all accounts List
+const getAccountsListById = async (req, res) => {
+    const { id } = req.params;
+    
     try {
-        const accounts = await Account.findById({ _id })
-        // Assuming accounts is not null
-        const accountName = accounts ? accounts.accountName : null;
+        const accounts = await Account.findById(id)
+            .populate({ path: 'tags', model: 'tag' })
+            .populate({ path: 'teamMembers', model: 'User' })
+            .populate({ path: 'contacts', model: 'contact' });
 
+            const accountlist = ({
+                id: accounts._id,
+                Name: accounts.accountName,
+                Follow: "",
+                Type: accounts.clientType,
+                Invoices: "",
+                Credits: "",
+                Tasks: "",
+                Team: accounts.teamMembers,
+                Tags: accounts.tags,
+                Proposals: "",
+                Unreadchats: "",
+                Pendingorganizers: "",
+                Pendingsignatures: "",
+                Lastlogin: "",
+                Contacts : accounts.contacts,
+            });
+        
 
-        //sort({ createdAt: -1 });
-        res.status(200).json({ message: "Accounts shortcode retrieved successfully", accountName })
+       //sort({ createdAt: -1 });
+        res.status(200).json({ message: "Accounts retrieved successfully", accountlist })
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
 };
+
+
+
 
 
 module.exports = {
@@ -236,6 +258,6 @@ module.exports = {
     updateAccount,
     deleteAccount,
     getAccountsList,
-    getAccountsShortCode,
+    getAccountsListById
 }
 
