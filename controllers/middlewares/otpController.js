@@ -10,7 +10,6 @@ const nodemailer = require("nodemailer");
 router.post("/request-otp", async (req, res) => {
   const email = req.body.email;
   const otp = generateOTP();
-  console.log(req.body);
 
   // HTML content for the email body
   const htmlPage = `

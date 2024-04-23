@@ -70,7 +70,9 @@ app.use("/workflow", workflowRoutes);
 const templateMailSend = require("../pmsbackend/controllers/middlewares/templateMailSend");
 app.use("/", templateMailSend);
 
-
+//! EmailTemplate Routes
+const usersavedemail = require("../pmsbackend/controllers/middlewares/usersavedemail");
+app.use("/", usersavedemail);
 
 app.listen(port, () => {
   console.log(`Server is running on port http://127.0.0.1:${port}`);

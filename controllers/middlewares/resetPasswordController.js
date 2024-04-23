@@ -22,6 +22,9 @@ router.post("/forgotpassword", async (req, res) => {
    // Add any other data you want to include in the payload
 };
 
+console.log(user._id)
+console.log(user.username)
+
     jwt.sign(payload, secretKey, { expiresIn: "300s" }, (err, token) => {
 
   const result = {

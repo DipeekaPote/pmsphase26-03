@@ -92,7 +92,7 @@ router.patch("/user/:id", updateUser);
 
 //Get a User by email
 
-router.get("/user/email/getuserbyemail", getUserByEmail);
+router.get("/user/email/getuserbyemail/:email", getUserByEmail);
 
 //Get a User by email
 

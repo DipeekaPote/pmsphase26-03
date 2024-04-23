@@ -104,22 +104,18 @@ const updateUser = async (req, res) => {
 // UPDATE a password 
 const updateUserPassword = async (req, res) => {
   const { password } = req.body;
-  const {id, token} = req.params;
+  const { id } = req.headers;
+  const token = req.headers.authorization; 
 
-  try {
-      // Check if password and confirm password match
-      // if (password !== cpassword) {
-      //     return res.status(400).json({ error: "Passwords do not match" });
-      // }
-
-      // Hash the new password
-      const hashedPassword = await bcrypt.hash(password, 10);
+try 
+{
+     const hashedPassword = await bcrypt.hash(password, 10);
     
-      // Find the admin by email and update their password
-      const updatedUser = await User.findOneAndUpdate(
-          { id: id },
-          { password: hashedPassword},
-          { new: true } // This option ensures that the updated document is returned
+      // Find the user by id and update their password
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        { password: hashedPassword },
+        { new: true } // This option ensures that the updated document is returned
       );
 
       if (!updatedUser) {
@@ -134,7 +130,7 @@ const updateUserPassword = async (req, res) => {
 
 
 const getUserByEmail = async (req, res) => {
-  const { email } = req.body;
+  const { email } = req.params;
 
   try {
       // Find the User by email
