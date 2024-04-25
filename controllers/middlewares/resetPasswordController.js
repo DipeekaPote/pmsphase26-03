@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken")
 router.post("/forgotpassword", async (req, res) => {
 
   const email = req.body.email;
+  const port = req.body.port;
   const user = await userf.findOne({ email: email });
 
   if (!email) {
@@ -38,7 +39,7 @@ console.log(user.username)
   //res.send('JWT token is set as a cookie');
     // console.log(req.body);
 
-  const verificationLink = `This Link Valid For 2 MINUTES http://localhost:3000/resetpassword/${user._id}/${result.token}`
+  const verificationLink = `This Link Valid For 2 MINUTES http://localhost:${port}/resetpassword/${user._id}/${result.token}`
   //console.log(verificationLink);
   // HTML content for the email body
   const htmlPage = `

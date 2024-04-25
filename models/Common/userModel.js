@@ -56,8 +56,8 @@ const userSchema = new mongoose.Schema(
         role: {
             //type: mongoose.Schema.Types.ObjectId,
             type: String,
-            ref: 'role',
-            required: [true, 'Role is required'],
+            // ref: 'role',
+            // required: [true, 'Role is required'],
 
         },
 

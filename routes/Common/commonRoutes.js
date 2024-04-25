@@ -9,12 +9,13 @@ const { createTag, getTag, getTags, deleteTag, updateTag } = require('../../cont
 const { createAccessRight, getAccessRight, getAccessRights, deleteAccessRight, updateAccessRight } = require('../../controllers/Common/accessRightsController')
 const { createContact, getContact, getContacts, deleteContact, updateContact, getContactsList } = require('../../controllers/Common/contactController')
 const { createUser, getUsers, getUser, deleteUser, updateUser, adminSignup, getUserByEmail, updateUserPassword, updateLoginStatus } = require("../../controllers/Common/userController");
-const { validateToken } = require("../../controllers/middlewares/authJwt");
+const { validateToken, logout, cleanupBlacklist } = require("../../controllers/middlewares/authJwt");
 const { generatetoken } = require("../../controllers/Common/loginController");
 const { adminLogin } = require("../../controllers/Common/loginController");
 const { createFolderTemplate, getFolders, getFolder, deleteFolderTemplate, updateFolderTemplate,deleteFile, downloadfile, deleteFolder, downloadfolder, getFolderStructure, createfolder,defaultfolderStructure } = require("../../controllers/Common/folderTemplateController");
 const { createSortJobsBy,  getSortJobsBy,  getSortJobBy,  deleteSortJobsBy,  updateSortJobsBy} = require("../../controllers/Common/sortJobsByController")
-const { getAutomations,  getAutomation,  createAutomation,  deleteAutomation,  updateAutomation} = require("../../controllers/Common/automationsController")
+const { getAutomations,  getAutomation,  createAutomation,  deleteAutomation,  updateAutomation} = require("../../controllers/Common/automationsController");
+
 
 //*******************ROLES START********************* */
 //GET all roles 
@@ -49,20 +50,19 @@ router.get('/login/verifytoken', validateToken, (req, res) => {
     res.json({ message: 'Access granted', user: req.user });
 });
 
-// user logout
-router.get("/login/logout", validateToken, async(req,res)=>{
 
-    const currentTimeUnix = Date.now();
+// // user logout
+//  router.get("/login/logout", validateToken, async (req, res) => {
+//   // Clearing the cookie on the client-side will effectively "logout" the user
+//   res.clearCookie("usercookie", { path: "/" });
+//   res.status(200).json({ status: 200, message: "Logout Successful" });
+// });
 
-if (req.user.exp === currentTimeUnix){
-    res.status(400).json({status:400})
-}
-else{
-    res.clearCookie("usercookie",{path:"/"});
-    res.status(200).json({status:200})
-    console.log("Logout Successfull")
-}
- })
+// Define the route for user logout
+router.post('/login/logout', validateToken, logout)
+
+// Call cleanupBlacklist every hour (3600000 milliseconds)
+// setInterval(cleanupBlacklist, 360); // Adjust the interval as needed
 
 //todo Admin application Login
 router.post("/login", adminLogin);

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const secretKey = process.env.TOKEN_KEY;
 
+
 //todo Handle admin login
 const adminLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -32,11 +33,7 @@ const generatetoken = async (req, res) => {
   try {
     const user = await User.login({ email, password });
 
-    const payload = {
-      id: user._id,
-      role: user.role
-      // Add any other data you want to include in the payload
-  };
+  
 
     if (!user) {
       res.status(422).json({ error: "Invalid Details" })
@@ -49,6 +46,14 @@ const generatetoken = async (req, res) => {
         case expiryTime:
           expiresIn= expiryTime * 60 * 100;
       }
+
+
+      const payload = {
+        id: user._id,
+        role: user.role
+        // Add any other data you want to include in the payload
+    };
+    
       jwt.sign(payload, secretKey, { expiresIn: expiryTime }, (err, token) => {
 
       const result = {
@@ -72,6 +77,7 @@ const generatetoken = async (req, res) => {
   res.status(404).json({ error: error.message });
 }
 };
+
 
 module.exports = { adminLogin, generatetoken };
 
