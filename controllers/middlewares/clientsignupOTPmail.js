@@ -1,20 +1,17 @@
-// controllers/otpController.js
 const express = require("express");
-const {generateOTP} = require("../../controllers/middlewares/randomStringGenerator");
-const sendEmail = require("../../controllers/middlewares/emailService");
+const generateOTP = require("../../controllers/middlewares/randomStringGenerator");
 const OTP = require("./otpModel"); // Import the OTP model
-const OTPModel = require("../../controllers/middlewares/otpModel");
 const router = express.Router();
 const nodemailer = require("nodemailer");
 
-router.post("/request-otp", async (req, res) => {
+router.post("/clientrequest-otp", async (req, res) => {
   const email = req.body.email;
   const otp = generateOTP();
- 
+
   // HTML content for the email body
   const htmlPage = `
   <!doctype html>
-<html lang="en">
+<html lang="en"> 
 
 
 <style>
@@ -58,8 +55,11 @@ router.post("/request-otp", async (req, res) => {
 
         <div class="container ">
             <h1> Welcome to PMS </h1>
-            <p>To continue enter this confirmation code:</p>
+            <p>Thank you for signing up </p>
+            <p> Your confirmation code is </p>
+
             <h2> ${otp}</h2>
+
             <h5>"Welcome to "SNP Tax & Financials", where tax management meets simplicity. Our advanced software
                 streamlines tax processes for individuals, businesses, and professionals, ensuring accuracy and
                 efficiency. Experience a new era of financial ease with SNP Tax & Financials."</h5>
@@ -115,8 +115,8 @@ router.post("/request-otp", async (req, res) => {
     } else {
       // If the record does not exist, create a new record
       const newOTPRecord = await OTP.create({ email: email, otp: otp });
-      console.log("New OTP record created:", newOTPRecord);
-      res.status(200).json({ msg: "New OTP record created" });
+      // console.log("New OTP record created:", newOTPRecord);
+      res.status(200).json({ msg: "New OTP record created",  newOTPRecord});
     }
   } catch (error) {
     // Handle any errors that occurred during the find or insert operation
@@ -125,7 +125,7 @@ router.post("/request-otp", async (req, res) => {
   }
 });
 
-router.post("/verify-otp", async (req, res) => {
+router.post("/verifyclient-otp", async (req, res) => {
   const email = req.body.email;
   const otpAttempt = req.body.otp;
 

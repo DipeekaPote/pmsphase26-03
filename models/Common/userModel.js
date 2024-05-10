@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
             min: 6,
             max: 15,
             trim: true, //?white spaces are removed
-          //  required: [true, "Confirm Password is required"],
+            //  required: [true, "Confirm Password is required"],
             validate: {
                 validator: function (value) {
                     return value === this.password;
@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema(
                 message: "Passwords do not match",
             },
         },
-        
+
 
         role: {
             //type: mongoose.Schema.Types.ObjectId,
@@ -62,12 +62,10 @@ const userSchema = new mongoose.Schema(
         },
 
         access: [{
-            acces: {
-                type: mongoose.Schema.Types.ObjectId,
-                type: Array,
-                ref: 'accessRights',
-                //required: [true, 'Access is required'],
-            }
+            type: mongoose.Schema.Types.ObjectId,
+            type: Array,
+            ref: 'accessRights',
+            //required: [true, 'Access is required'],
         }],
 
         loginStatus: {
@@ -85,11 +83,11 @@ const userSchema = new mongoose.Schema(
 
 //!static signup method
 userSchema.statics.signup = async function (data) {
-    const {  username, email, password, role } = data;
+    const { username, email, password, role } = data;
 
     //todo validation all fields required
 
-    if (!username || !email || !password || !role)  {
+    if (!username || !email || !password || !role) {
         throw Error("all fields required ");
     }
     //todo username uniq
@@ -110,8 +108,8 @@ userSchema.statics.signup = async function (data) {
     //todo everthing ok please create new user
     const salt = await bcrypt.genSalt(10);
     const hash1 = await bcrypt.hash(password, salt);
-   
-    const user = await this.create({ username, email, password: hash1,  role });
+
+    const user = await this.create({ username, email, password: hash1, cpassword: hash1, role });
     return user;
 };
 

@@ -74,14 +74,27 @@ app.use("/", templateMailSend);
 const usersavedemail = require("../pmsbackend/controllers/middlewares/usersavedemail");
 app.use("/", usersavedemail);
 
-
 //!  Routes
 const passwordupdateemail = require("../pmsbackend/controllers/middlewares/passwordupdatemail")
 app.use("/", passwordupdateemail);
 
+const clientsignupOTPmail = require("../pmsbackend/controllers/middlewares/clientsignupOTPmail");
+app.use("/", clientsignupOTPmail);
+
+//! EmailTemplate Routes
+const clientsavedemail = require("../pmsbackend/controllers/middlewares/clientsavedEmail");
+app.use("/", clientsavedemail);
+
+
+//! EmailTemplate Routes
+const teammembersavedemail = require("../pmsbackend/controllers/middlewares/teamMembersendInviteEmail");
+app.use("/", teammembersavedemail);
+
+
 app.listen(port, () => {
   console.log(`Server is running on port http://127.0.0.1:${port}`);
 });
+
 
 app.get('/current-timestamp', (req, res) => {
   const currentTimestamp = Math.floor(Date.now() / 1000); // Convert milliseconds to seconds

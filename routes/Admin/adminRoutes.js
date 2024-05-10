@@ -3,76 +3,53 @@ const router = express.Router()
 
 const { createAdmin, getAdmins, getAdmin, deleteAdmin, updateAdmin, updatePassword, getAdminByEmail } = require('../../controllers/Admin/adminSignupController')
 const { createAccount, getAccount, getAccounts, updateAccount, deleteAccount, getAccountsList, getAccountsListById } = require('../../controllers/Admin/accountDetailsController')
-
+const { createTeamMember, getTeamMembers, getTeamMember, deleteTeamMember, updateTeamMember, getTeamMemberList, updateTeamMemberPassword } = require('../../controllers/Admin/teamMemberController')
+const { getClients, getClient, createClient, deleteClient, updateClient, getClientByEmail, updateclientPassword } = require('../../controllers/Admin/clientSignupController')
 
 //*******************ADMIN SIGNUP START********************* */
-//GET all adminsignup 
-
 router.get('/adminsignup', getAdmins)
-
-//GET single adminsignup 
-
 router.get('/adminsignup/:id', getAdmin)
-
-//POST a new adminsignup
-
 router.post('/adminsignup', createAdmin)
-
-//DELETE a adminsignup 
-
 router.delete('/adminsignup/:id', deleteAdmin)
-
-//PATCH UPDATE a adminsignup 
-
 router.patch('/adminsignup/:id', updateAdmin)
-
-//PATCH UPDATE a Password 
-
 router.get('/adminsignup/adminbyemail', getAdminByEmail)
-
 router.patch('/adminsignup/updatepassword', updatePassword)
 
 //*******************ADMIN SIGNUP END********************* */
 
 
 //*******************ACCOUNT DETAILS START********************* */
-
-//GET all accountdetails 
-
 router.get('/accountdetails', getAccounts)
-
-//GET single accountdetails 
-
 router.get('/accountdetails/:id', getAccount)
-
-//POST a new adminsignup
-
 router.post('/accountdetails', createAccount)
-
-
-// router.post('/accountdetails', upload.single('file'), async (req, res) => {
-// createAccount
-// });
-
-//DELETE a adminsignup 
-
 router.delete('/accountdetails/:id', deleteAccount)
-
-//PATCH UPDATE a adminsignup 
-
 router.patch('/accountdetails/:id', updateAccount)
-
-//GET accountdetails List
-
 router.get('/account/accountdetailslist/', getAccountsList)
-
-
-//GET accountdetails List
 router.get('/accountdetails/accountdetailslist/listbyid/:id', getAccountsListById)
 
 //*******************ACCOUNT DETAILS END********************* */
 
+//******Team Member START******** *//
+router.get('/teammembers', getTeamMembers)
+router.get('/teammember/:id', getTeamMember)
+router.post('/teammember', createTeamMember)
+router.delete('/teammember/:id', deleteTeamMember)
+router.patch('/teammember/:id', updateTeamMember)
+router.get('/teammember/teammemberlist/list', getTeamMemberList)
+router.patch('/teammember/updateTeamMemberPassword', updateTeamMemberPassword)
 
+//******Team Member END******** */
+
+//******client SIGNUP START******** */
+router.get('/clientsignup', getClients)
+router.get('/clientsignup/:id', getClient)
+router.post('/clientsignup', createClient)
+router.delete('/clientsignup/:id', deleteClient)
+router.patch('/clientsignup/:id', updateClient)
+router.get('/clientsignup/clientbyemail', getClientByEmail)
+router.patch('/clientsignup/updateclientPassword', updateclientPassword)
+
+//******client SIGNUP END******** */
 
 module.exports = router
 

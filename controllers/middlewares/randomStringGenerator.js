@@ -9,7 +9,15 @@ function generateOTP() {
   });
 }
 
-
+function generateAlphanumericOTP(length) {
+  const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let otp = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    otp += charset[randomIndex];
+  }
+  return otp;
+}
 
 // // Code to handle password reset request and send email containing reset link
 // app.post('/forgot-password', async (req, res) => {
@@ -31,4 +39,4 @@ function generateOTP() {
 
 
 
-module.exports = generateOTP;
+module.exports =  generateOTP ;

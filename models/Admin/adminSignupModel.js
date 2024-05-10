@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+
 const adminSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -38,12 +39,10 @@ const adminSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
     minlength: 6, // Minimum length of 6 characters
   },
   cpassword: {
     type: String,
-    required: true,
     validate: {
       validator: function (v) {
         return this.password === v; // Ensure cpassword matches password
@@ -115,14 +114,11 @@ const adminSchema = new mongoose.Schema({
     required: true,
     enum: ["Google search", "Capterra/ Get app/ G2", "From a friend", "Offline event", "Social media", "Taxdome consultant/ Partner", "Other"],
   },
-  services: [
-    {
-      service: {
-        type: [String],
+  services: [{
+          type: [String],
         required: true,
         // enum: ["TaxPreparation", "TaxPlanning", "Advisory", "Resolution", "Payroll", "Accounting", "Audit", "LawFirm", "Bookkeeping", "Other"],
-      },
-    },
+      }
   ],
 
   role: {

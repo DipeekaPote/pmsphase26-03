@@ -42,7 +42,7 @@ const createTag = async (req, res) => {
         const existingTag = await Tags.findOne({ tagName });
 
         if (existingTag) {
-            return res.status(400).json({ message: "Tag with this TagName already exists" });
+            return res.status(400).json({message: "Tag with this TagName already exists" });
         }
 
         const newTag = await Tags.create({ tagName, tagColour, active });

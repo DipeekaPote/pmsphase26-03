@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken")
 router.post("/forgotpassword", async (req, res) => {
 
   const email = req.body.email;
-  const port = req.body.port;
+  const url = req.body.url;
   const user = await userf.findOne({ email: email });
 
   if (!email) {
@@ -22,9 +22,6 @@ router.post("/forgotpassword", async (req, res) => {
     id: user._id,
    // Add any other data you want to include in the payload
 };
-
-console.log(user._id)
-console.log(user.username)
 
     jwt.sign(payload, secretKey, { expiresIn: "300s" }, (err, token) => {
 
@@ -39,7 +36,7 @@ console.log(user.username)
   //res.send('JWT token is set as a cookie');
     // console.log(req.body);
 
-  const verificationLink = `This Link Valid For 2 MINUTES http://localhost:${port}/resetpassword/${user._id}/${result.token}`
+  const verificationLink = `This Link Valid For 2 MINUTES ${url}/${user._id}/${result.token}`
   //console.log(verificationLink);
   // HTML content for the email body
   const htmlPage = `
@@ -48,7 +45,6 @@ console.log(user.username)
 
 <style>
     p {
-
         color: #0f172a;
         font-size: 18px;
         line-height: 29px;
@@ -63,7 +59,6 @@ console.log(user.username)
         line-height: 44px;
         margin-bottom: 4px;
     }
-
     h2 {
         color: #1b235c;
         font-size: 100px;
@@ -72,7 +67,6 @@ console.log(user.username)
         margin-top: 40px;
         margin-bottom: 40px;
     }
-
     .container {
         text-align: center;
     }
